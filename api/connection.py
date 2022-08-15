@@ -38,7 +38,7 @@ class Connection:
         })
 
 
-    def create(self, payload: object) -> Status:
+    def create(self, payload: dict) -> Status:
         response = requests.post(
             url='{}/{}'.format(URI, self.table),
             data=json.dumps(payload),
@@ -66,8 +66,13 @@ class Connection:
         return Response(response.text)
 
 
-    def update(self):
-        pass
+    def update(self, target: int | str, payload: dict) -> Status:
+        response = requests.put(
+            url='{}/{}/{}'.format(URI, self.table, target),
+            data=json.dumps(payload),
+            headers=headers()
+        )
+        return Status(response.text)
 
 
     def detele(self):
