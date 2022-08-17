@@ -7,8 +7,8 @@ def get_operator(param: str) -> str:
         return '<'
     elif param.__contains__('!='):
         return '!='
-    elif param.__contains__('!!'):
-        return 'LE'
+    elif param.__contains__('?'):
+        return 'L'
     return '='
 
 
@@ -28,7 +28,7 @@ def get_value(param: str) -> str:
 
 def terminal(cmd: str):
     return {
-        'c': get_column(cmd),
-        'o': get_operator(cmd),
-        'v': get_value(cmd)
+        'field':    get_column(cmd),
+        'operator': get_operator(cmd),
+        'value':    get_value(cmd).replace('"', '')
     }

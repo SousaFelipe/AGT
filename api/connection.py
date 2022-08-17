@@ -66,7 +66,7 @@ class Connection:
         return Response(response.text)
 
 
-    def update(self, target: int | str, payload: dict) -> Status:
+    def update(self, target: str | str, payload: dict) -> Status:
         response = requests.put(
             url='{}/{}/{}'.format(URI, self.table, target),
             data=json.dumps(payload),
@@ -75,5 +75,11 @@ class Connection:
         return Status(response.text)
 
 
-    def detele(self):
-        pass
+    def find(self, target_id) -> dict:
+        output: dict = {}
+        connection: Connection = Connection(table=self.table)
+        connection.where(column='id', operator='=', value=target_id)
+        response = connection.read()
+        if response.get_total() > 0:
+            output = response.get_records()[0]
+        return output

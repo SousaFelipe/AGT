@@ -1,48 +1,35 @@
 import math
-import sys
-
 
 from api.connection import Connection
-from api.response import Response
-from app.excel import Excel
 from app.terminal import terminal
 
 
-def do_print(data: Response):
-    for record in data.get_records():
-        print(record['login'])
 
+def loop(table: str) -> list:
+    output: list = []
 
-def loop(table: str):
-    params: str = sys.argv[3]
-    action: str = sys.argv[4]
-    connection = Connection(table)
+    print('WHERE\'s (separadas por vírgula):', end=' ')
+    params: str = str(input())
 
-    print('\nPreparing to READ data in table "{}"...\n'.format(table))
+    r_connection = Connection(table)
 
     for conditon in params.split(','):
         cmd = terminal(conditon)
-        connection.where(column=cmd['c'], operator=cmd['o'], value=cmd['v'])
+        r_connection.where(column=cmd['field'], operator=cmd['operator'], value=cmd['value'])
 
     pg_numb: int = 1
-    pg_data = connection.read(page=pg_numb)
+    pg_data = r_connection.read(page=pg_numb)
 
     if pg_data.get_total() > 0:
         page_total = math.ceil(pg_data.get_total() / 20)
 
-        if action == 'show':
-            do_print(data=pg_data)
-            while pg_numb < page_total:
-                pg_data = connection.read(page=pg_numb + 1)
-                if action == 'show':
-                    do_print(data=pg_data)
-                pg_numb += 1
+        for record in pg_data.get_records():
+            output.append(record)
 
-        elif action == 'store':
-            excel = Excel(headers=sys.argv[5].split(','))
-            excel.add(data=pg_data.get_records())
-            while pg_numb < page_total:
-                pg_data = connection.read(page=pg_numb + 1)
-                excel.add(data=pg_data.get_records())
-                pg_numb += 1
-            excel.save(sheet=table)
+        while pg_numb < page_total:
+            pg_data = r_connection.read(page=pg_numb + 1)
+            for record in pg_data.get_records():
+                output.append(record)
+            pg_numb += 1
+
+    return output

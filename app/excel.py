@@ -2,6 +2,7 @@ import pandas as pd
 import os
 
 
+
 MAIN_PATH: str = os.path.expanduser('~\\Documents')
 
 
@@ -26,12 +27,13 @@ class Excel:
 
 
     def save(self, sheet: str):
+        filename: str = '{}\\{}.xlsx'.format(MAIN_PATH, sheet)
         df = pd.DataFrame(
             data=self.data,
             columns=self.headers
         )
         df.to_excel(
-            excel_writer='{}\\{}.xlsx'.format(MAIN_PATH, sheet),
+            excel_writer=filename,
             sheet_name=sheet
         )
-        print('{} Saveds in file "{}\\{}"'.format(self.size, MAIN_PATH, sheet))
+        print('{} Linhas salvas no arquivo "{}"'.format(self.size, filename))
