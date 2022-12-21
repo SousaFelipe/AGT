@@ -1,10 +1,8 @@
 import sys
 
-import app.reader
 import app.writer
 
 from app.excel import Excel
-
 
 
 def show(dataset: list):
@@ -35,21 +33,22 @@ def store(dataset: list):
     excel.save(sheet=filename)
 
 
-
 if __name__ == '__main__':
 
     command: str = sys.argv[1]
     target: str = sys.argv[2]
-    data: list = []
 
     print('\n')
 
-    if command == 'SELECT':
-        data = app.reader.loop(table=target)
-
-    elif command == 'UPDATE':
-        data = app.writer.loop(table=target)
+    if len(sys.argv) > 4 and sys.argv[3] == 'REPLACE':
+        data: list = app.writer.loop(table=target, replace=sys.argv[4])
+    else:
+        data: list = app.writer.loop(table=target)
 
     if len(data) > 0:
-        # show(dataset=data)
-        store(dataset=data)
+
+        if command == 'VIEW':
+            show(dataset=data)
+
+        elif command == 'SAVE':
+            store(dataset=data)

@@ -1,14 +1,23 @@
 
 
 def get_operator(param: str) -> str:
+
     if param.__contains__('>'):
+        if param.__contains__('>='):
+            return '>='
         return '>'
+
     elif param.__contains__('<'):
+        if param.__contains__('<='):
+            return '<='
         return '<'
+
     elif param.__contains__('!='):
         return '!='
+
     elif param.__contains__('?'):
         return 'L'
+
     return '='
 
 
@@ -27,6 +36,7 @@ def get_value(param: str) -> str:
 
 
 def terminal(cmd: str):
+    cmd = cmd.lstrip().rstrip()
     return {
         'field':    get_column(cmd),
         'operator': get_operator(cmd),

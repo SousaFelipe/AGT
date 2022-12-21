@@ -1,6 +1,5 @@
-import pandas as pd
 import os
-
+import pandas as pd
 
 
 MAIN_PATH: str = os.path.expanduser('~\\Documents')
@@ -8,12 +7,10 @@ MAIN_PATH: str = os.path.expanduser('~\\Documents')
 
 class Excel:
 
-
     def __init__(self, headers: list[str]):
         self.headers: list[str] = headers
         self.data: list[list[str]] = []
         self.size: int = 0
-
 
     def add(self, data: list[dict]):
         row: list[str] = []
@@ -24,7 +21,6 @@ class Excel:
             self.data.append(row)
             self.size += 1
             row = []
-
 
     def save(self, sheet: str):
         filename: str = '{}\\{}.xlsx'.format(MAIN_PATH, sheet)

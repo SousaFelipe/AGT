@@ -6,11 +6,9 @@ from api.response import Response
 from api.status import Status
 
 
-
 URI = 'https://agilityquixeramobim.com.br/webservice/v1'
 TOKEN = '6:d94f8ccff332c49a266088ea3e0afaa2bdac77157bc4c698d7ab7e35971192bd'.encode('utf-8')
 AUTHORIZATION = 'Basic {}'.format(base64.b64encode(TOKEN).decode('utf-8'))
-
 
 
 def headers(request: str = ''):
@@ -21,14 +19,11 @@ def headers(request: str = ''):
     }
 
 
-
 class Connection:
-
 
     def __init__(self, table: str):
         self.table: str = table
         self.grid: list = []
-
 
     def where(self, column: str, operator: str, value: any):
         self.grid.append({
@@ -37,7 +32,6 @@ class Connection:
             'P': value
         })
 
-
     def create(self, payload: dict) -> Status:
         response = requests.post(
             url='{}/{}'.format(URI, self.table),
@@ -45,7 +39,6 @@ class Connection:
             headers=headers()
         )
         return Status(response.text)
-
 
     def read(self, page: int = 1, rows: int = 20, sort_name: str = 'id', sort_order: str = 'asc') -> Response:
         payload: object = {
@@ -65,7 +58,6 @@ class Connection:
         )
         return Response(response.text)
 
-
     def update(self, target: str | str, payload: dict) -> Status:
         response = requests.put(
             url='{}/{}/{}'.format(URI, self.table, target),
@@ -73,7 +65,6 @@ class Connection:
             headers=headers()
         )
         return Status(response.text)
-
 
     def find(self, target_id) -> dict:
         output: dict = {}

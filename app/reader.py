@@ -4,7 +4,6 @@ from api.connection import Connection
 from app.terminal import terminal
 
 
-
 def loop(table: str) -> list:
     output: list = []
 
